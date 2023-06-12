@@ -1,4 +1,4 @@
-import { mdLinks } from '/mdlinks.js';
+import { mdLinks } from './mdlinks.js';
 
 mdLinks();
 
