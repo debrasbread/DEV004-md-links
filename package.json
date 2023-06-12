@@ -1,10 +1,12 @@
 {
   "name": "md-links",
+  "type": "module",
   "version": "0.1.0",
   "engines": {
     "node": ">=16.x"
   },
   "scripts": {
+    "test": "jest --verbose --coverage",
     "start": "node index.js"
   },
   "bootcamp": {
