@@ -1,50 +1,76 @@
-import { mdLinks } from './mdlinks.js';
-// import { determinarExistencia } from './mdlinks.js';
+import { mdLinks, determinarExistencia, esAbsoluta, convertirAbsoluta, leerArchivo } from './mdlinks.js';
+import fs from 'fs';
+import path from 'path';
+import marked from 'marked';
+
+// Verificar la existencia de una ruta
+test('determinarExistencia: debe devolver true si la ruta existe', () => {
+  expect(determinarExistencia('ejemplo.md')).toBe(true);
+});
+
+test('determinarExistencia: debe devolver false si la ruta no existe', () => {
+    expect(determinarExistencia('ejemplo.md')).not.toBe(false);
+  }); 
 
 
-describe('determinarExistencia', () => {
-    it('debería retornar que no existe', () => {
-       // determinarExistencia(...)
-    })
-})
+// Verificar si la ruta es absoluta
+test('esAbsoluta: debe devolver true si la ruta es absoluta', () => {
+  expect(esAbsoluta('/Users/username/Documents/example.md')).toBe(true);
+});
 
-it('debería retornar que sí existe', () => {
-   // determinarExistencia(...)
-})
+test('esAbsoluta: debe devolver false si la ruta no es absoluta', () => {
+  expect(esAbsoluta('ejemplo.md')).toBe(false);
+});
 
-// Probar funciones que RETORNAN PROMESAS (funciones asíncronas)
+// Convertir la ruta relativa en absoluta
+test('convertirAbsoluta: debe convertir una ruta relativa en absoluta', () => {
+    expect(convertirAbsoluta('ejemplo.md')).toBe('/Users/debra/Desktop/GitHub/DEV004-md-links/ejemplo.md');
+  });
+
+  
+// Leer el contenido de un archivo
+test('leerArchivo: debe leer el contenido de un archivo', async () => {
+    const contenido = await leerArchivo('ejemplo.md');
+    expect(contenido).toContain('[Markdown](https://es.wikipedia.org/wiki/Markdown)');
+    expect(contenido).toContain('[Node.js](https://nodejs.org/)');
+    expect(contenido).toContain('[motor de JavaScript V8 de Chrome](https://developers.google.com/v8/)');
+  });
+  
 
 /*
-test('the data is peanut butter', () => {
-  return fetchData().then(data => {
-    expect(data).toBe('peanut butter');
+
+// mdLinks con contenido de ejemplo
+describe('mdLinks', () => {
+  test('debe extraer los enlaces de un archivo Markdown correctamente', async () => {
+    const contenidoMock = `
+      [Markdown](https://es.wikipedia.org/wiki/Markdown)
+      [Node.js](https://nodejs.org/)
+      [motor de JavaScript V8 de Chrome](https://developers.google.com/v8/)
+    `;
+    const linksEsperados = [
+      {
+        href: 'https://es.wikipedia.org/wiki/Markdown',
+        text: 'Markdown',
+        file: 'ejemplo.md',
+      },
+      {
+        href: 'https://nodejs.org/',
+        text: 'Node.js',
+        file: 'ejemplo.md',
+      },
+      {
+        href: 'https://developers.google.com/v8/',
+        text: 'motor de JavaScript V8 de Chrome',
+        file: 'ejemplo.md',
+      },
+    ];
+
+    jest.spyOn(fs, 'readFile').mockImplementationOnce((ruta, codificacion, callback) => {
+      callback(null, contenidoMock);
+    });
+
+    const links = await mdLinks('ejemplo.md');
+    expect(links).toEqual(linksEsperados);
   });
 });
 */
-
-describe('mdLinks', () => {
-    it('mdLinks procesa un solo archivo con 3 links sin validar', () => {
-        const ruta = 'ejemplo.md';
-        return mdLinks(ruta, { validate: false }) // Le digo que no valide. Es muy importante el return
-            .then((array) => {
-                expect(array).toEqual([
-                    {
-                        href: 'https://es.wikipedia.org/wiki/Markdown',
-                        text: 'Markdown',
-                        file: 'ejemplo.md',
-                    },
-                    {
-                        href: 'https://nodejs.org/',
-                        text: 'Node.js',
-                        file: 'ejemplo.md',
-                    },
-                    {
-                        href: 'https://developers.google.com/v8/',
-                        text: 'motor de JavaScript V8 de Chrome',
-                        file: 'ejemplo.md',
-                    }
-                ]); // Expect debe estar dentro de un then (es la promesa). La promesa se resuelve con el arreglo de objetos (3 links): url, texto y archivo
-            });
-    });
-});
-

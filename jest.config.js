@@ -1,7 +1,10 @@
-export default {
-    transform: {
-        '^.+\\.(m?js|ts)$': 'babel-jest', // transpile mjs, mts, js,
-    },
-}; 
+import chalk from 'chalk';
 
-// Configuración de chalk va aquí
+export default {
+  transform: {
+    '^.+\\.(m?js|ts)$': 'babel-jest',
+  },
+  globals: {
+    chalk: chalk.default, 
+  },
+};
