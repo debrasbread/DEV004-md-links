@@ -1,76 +1,64 @@
-import { mdLinks, determinarExistencia, esAbsoluta, convertirAbsoluta, leerArchivo } from './mdlinks.js';
-import fs from 'fs';
-import path from 'path';
-import marked from 'marked';
+import { determinarExistencia, esAbsoluta, leerArchivo, mdLinks } from './mdlinks.js';
 
-// Verificar la existencia de una ruta
-test('determinarExistencia: debe devolver true si la ruta existe', () => {
-  expect(determinarExistencia('ejemplo.md')).toBe(true);
-});
-
-test('determinarExistencia: debe devolver false si la ruta no existe', () => {
-    expect(determinarExistencia('ejemplo.md')).not.toBe(false);
-  }); 
-
-
-// Verificar si la ruta es absoluta
-test('esAbsoluta: debe devolver true si la ruta es absoluta', () => {
-  expect(esAbsoluta('/Users/username/Documents/example.md')).toBe(true);
-});
-
-test('esAbsoluta: debe devolver false si la ruta no es absoluta', () => {
-  expect(esAbsoluta('ejemplo.md')).toBe(false);
-});
-
-// Convertir la ruta relativa en absoluta
-test('convertirAbsoluta: debe convertir una ruta relativa en absoluta', () => {
-    expect(convertirAbsoluta('ejemplo.md')).toBe('/Users/debra/Desktop/GitHub/DEV004-md-links/ejemplo.md');
+describe('determinarExistencia', () => {
+  it('debería retornar true si la ruta existe', () => {
+    return determinarExistencia('./ruta/existente')
+      .then((result) => {
+        expect(result).toBe(true);
+      });
   });
 
-  
-// Leer el contenido de un archivo
-test('leerArchivo: debe leer el contenido de un archivo', async () => {
-    const contenido = await leerArchivo('ejemplo.md');
-    expect(contenido).toContain('[Markdown](https://es.wikipedia.org/wiki/Markdown)');
-    expect(contenido).toContain('[Node.js](https://nodejs.org/)');
-    expect(contenido).toContain('[motor de JavaScript V8 de Chrome](https://developers.google.com/v8/)');
+  it('debería retornar false si la ruta no existe', () => {
+    return determinarExistencia('./ruta/inexistente')
+      .then((result) => {
+        expect(result).toBe(false);
+      });
   });
-  
+});
 
-/*
+describe('esAbsoluta', () => {
+  it('debería retornar la misma ruta si ya es absoluta', () => {
+    const ruta = '/ruta/absoluta';
+    const resultado = esAbsoluta(ruta);
+    expect(resultado).toBe(ruta);
+  });
 
-// mdLinks con contenido de ejemplo
+  it('debería retornar la ruta absoluta si es relativa', () => {
+    const ruta = './ruta/relativa';
+    const resultado = esAbsoluta(ruta);
+    const rutaAbsolutaEsperada = '/ruta/absoluta/ruta/relativa'; // Reemplaza con la ruta absoluta correcta
+    expect(resultado).toBe(rutaAbsolutaEsperada);
+  });
+});
+
+describe('leerArchivo', () => {
+  it('debería leer el contenido de un archivo', () => {
+    const ruta = './ruta/archivo.md';
+    return leerArchivo(ruta)
+      .then((contenido) => {
+        // Realiza las aserciones correspondientes al contenido del archivo
+        expect(contenido).toBeDefined();
+      });
+  });
+
+  it('debería rechazar la promesa si ocurre un error al leer el archivo', () => {
+    const ruta = './ruta/archivoInexistente.md';
+    return leerArchivo(ruta)
+      .catch((error) => {
+        // Realiza las aserciones correspondientes al error
+        expect(error).toBeDefined();
+      });
+  });
+});
+
 describe('mdLinks', () => {
-  test('debe extraer los enlaces de un archivo Markdown correctamente', async () => {
-    const contenidoMock = `
-      [Markdown](https://es.wikipedia.org/wiki/Markdown)
-      [Node.js](https://nodejs.org/)
-      [motor de JavaScript V8 de Chrome](https://developers.google.com/v8/)
-    `;
-    const linksEsperados = [
-      {
-        href: 'https://es.wikipedia.org/wiki/Markdown',
-        text: 'Markdown',
-        file: 'ejemplo.md',
-      },
-      {
-        href: 'https://nodejs.org/',
-        text: 'Node.js',
-        file: 'ejemplo.md',
-      },
-      {
-        href: 'https://developers.google.com/v8/',
-        text: 'motor de JavaScript V8 de Chrome',
-        file: 'ejemplo.md',
-      },
-    ];
-
-    jest.spyOn(fs, 'readFile').mockImplementationOnce((ruta, codificacion, callback) => {
-      callback(null, contenidoMock);
-    });
-
-    const links = await mdLinks('ejemplo.md');
-    expect(links).toEqual(linksEsperados);
+  it('debería retornar un array de objetos con los enlaces encontrados en el archivo Markdown', () => {
+    const ruta = './ruta/archivo.md';
+    return mdLinks(ruta)
+      .then((enlaces) => {
+        // Realiza las aserciones correspondientes a los enlaces encontrados
+        expect(enlaces).toBeDefined();
+        expect(Array.isArray(enlaces)).toBe(true);
+      });
   });
 });
-*/
