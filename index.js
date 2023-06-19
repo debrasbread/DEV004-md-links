@@ -1,9 +1,11 @@
+// index.js
+
 import { mdLinks } from './mdlinks.js';
 
-mdLinks('ejemplo.md')
-.catch((err)=>{
-  console.log(err);
-})
-.then((response)=>{
-  console.log(response, 'response');
-})
+mdLinks('mdlinks.js')
+  .then((response) => {
+    console.log(response, 'response');
+  })
+  .catch((err) => {
+    console.error(err);
+  });
