@@ -81,7 +81,7 @@ describe('mdLinks', () => {
       expect(enlaces.length).toBe(3);
       expect(enlaces[0]).toHaveProperty('text', 'Markdown');
       expect(enlaces[0]).toHaveProperty('href', 'https://es.wikipedia.org/wiki/Markdown');
-      // ... Continuar con las aserciones para el resto de los enlaces
+      // RESTO DE LOS ENLACES
     });
   
     it('debería retornar un array vacío si no se encuentran enlaces', async () => {
