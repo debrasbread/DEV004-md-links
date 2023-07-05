@@ -3,16 +3,22 @@ import path from 'path';
 import { determinarExistencia, esAbsoluta, leerArchivo, extraerEnlaces, mdLinks } from './mdlinks';
 
 describe('determinarExistencia', () => {
+
   it('debería retornar true si la ruta existe', () => {
+    // Llamada a la función determinarExistencia con una ruta existente
     return determinarExistencia('./ejemplo.md')
       .then((result) => {
+        // Afirmación: El resultado debe ser igual a true
         expect(result).toBe(true);
       });
   });
 
+  // Prueba: Debería retornar false si la ruta no existe
   it('debería retornar false si la ruta no existe', () => {
+    // Llamada a la función determinarExistencia con una ruta inexistente
     return determinarExistencia('./ruta/inexistente')
       .then((result) => {
+        // Afirmación: El resultado debe ser igual a false
         expect(result).toBe(false);
       });
   });

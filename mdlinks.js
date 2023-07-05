@@ -32,12 +32,12 @@ export const leerArchivo = (ruta) => { // Define una función llamada leerArchiv
     });
 };
 
-// Función para extraer enlaces de un contenido de archivo Markdown
+// Función para extraer enlaces de un archivo Markdown
 export const extraerEnlaces = (contenido) => { // Define una función llamada extraerEnlaces que toma el contenido como parámetro
     const enlaces = []; // Crea un array para almacenar los enlaces encontrados
     const regex = /\[([^\]]+)\]\(([^\)]+)\)/g; // Define una expresión regular para buscar el patrón de enlaces en el contenido
-    let match; // Variable para almacenar los resultados de las coincidencias de la expresión regular
-
+    let match; // *** SENTENCIA *** Variable para almacenar los resultados de las coincidencias de la expresión regular
+// *** Si yo tengo un valor de retorno, es una expresión ****
     while ((match = regex.exec(contenido))) { // Busca todas las coincidencias de enlaces en el contenido utilizando un bucle while
         const textoEnlace = match[1]; // Obtiene el texto del enlace de la coincidencia
         const hrefEnlace = match[2]; // Obtiene la URL del enlace de la coincidencia
@@ -78,3 +78,4 @@ export const mdLinks = async (ruta) => { // Declaración de la función mdLinks 
         throw error; // Lanza el error para ser manejado externamente
     }
 };
+// array, corchetes; objeto, llaves. El objeto tiene muchos niveles de anidamiento.
